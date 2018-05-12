@@ -1,6 +1,6 @@
 PROGRAM = tests/run-tests
 MODULES_DIR = modules
-OBJECT_FILES = sources/gio.o sources/gio_aux.o tests/main.o
+OBJECT_FILES = sources/gio.o tests/strings.o tests/cstrings.o tests/main.o
 CONSTANTS_FILE = sources/constants.f90
 CONSTANTS_GENERATOR = sources/constants
 
