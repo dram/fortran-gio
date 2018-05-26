@@ -1,8 +1,6 @@
 PROGRAM = tests/run-tests
 MODULES_DIR = modules
 OBJECT_FILES = sources/gio.o tests/strings.o tests/cstrings.o tests/main.o
-CONSTANTS_FILE = sources/constants.f90
-CONSTANTS_GENERATOR = sources/constants
 
 .PHONY: build clean run setup
 
@@ -11,13 +9,8 @@ build: setup ${PROGRAM}
 run: build
 	@${PROGRAM}
 
-sources/gio.o: sources/gio.f90 ${CONSTANTS_FILE}
-
-${CONSTANTS_FILE}: ${CONSTANTS_GENERATOR}
-	$^ >$@
-
-${CONSTANTS_GENERATOR}: sources/constants.c
-	${CC} -Wall $(shell pkg-config --cflags gio-2.0) -o $@ $^
+sources/gio.f90: tools/api-translator.py
+	$< gio /usr/local/share/gir-1.0/Gio-2.0.gir >$@
 
 %.o: %.f90
 	${CC} -Wall -J ${MODULES_DIR} -o $@ -c $<
@@ -32,4 +25,3 @@ ${MODULES_DIR}:
 
 clean:
 	rm -rf ${PROGRAM} ${OBJECT_FILES} ${MODULES_DIR}
-	rm -rf ${CONSTANTS_GENERATOR} ${CONSTANTS_FILE}
